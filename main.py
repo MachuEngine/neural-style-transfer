@@ -89,9 +89,14 @@ class StyleLoss(nn.Module):
         self.loss = F.mse_loss(G, self.target)
         return input
 
-
+""" 
+models.vgg19(pretrained=True).features.to(device).eval()는 사전 학습된 
+VGG19 모델을 가져와서 특징 추출기(features) 부분만 사용하도록 설정하는 것.
+즉, fully connected layer(FCL)를 제거한 채 컨볼루션 레이어만 남겨서 이미지의 
+스타일과 콘텐츠 특징을 추출하는 용도.
+"""
 # 사전 학습된 VGG19 모델을 불러오고, 평가 모드로 설정 ========================
-cnn = models.vgg19(pretrained=True).features.to(device).eval()
+cnn = models.vgg19(pretrained=True, progress=True).features.to(device).eval()
 
 # 정규화에 사용될 평균값과 표준편차 (ImageNet 기준)
 cnn_normalization_mean = torch.tensor([0.485, 0.456, 0.406]).to(device)
